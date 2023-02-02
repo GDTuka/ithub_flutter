@@ -21,6 +21,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Todo {
+  Todo(
+    this.description,
+    this.title,
+    this.todoEnum,
+  );
+  String description;
+  String title;
+  TodoEnum todoEnum;
+}
+
+enum TodoEnum {
+  hight,
+  medium,
+  low,
+}
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
     super.key,
@@ -32,6 +49,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   TodoLocalDataSource todoLocalDataSource = TodoLocalDataSource();
+
+  Todo todo = Todo('Some Description', 'SomeTitle', TodoEnum.medium);
 
   Future<void> addNewTodo(TodoModel todoModel) async {
     await saveNewTodo(todoModel);
@@ -47,6 +66,19 @@ class _MyHomePageState extends State<MyHomePage> {
     await Future.delayed(const Duration(seconds: 2));
 
     return todo;
+  }
+
+  String? getSomePriority() {
+    if (todo.todoEnum == TodoEnum.hight) {
+      return 'Hight';
+    }
+    if (todo.todoEnum == TodoEnum.medium) {
+      return 'medium';
+    }
+    if (todo.todoEnum == TodoEnum.low) {
+      return 'low';
+    }
+    return null;
   }
 
   @override
