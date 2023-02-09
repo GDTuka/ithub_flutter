@@ -1,3 +1,12 @@
-abstract class HomeBlocEvent {}
+abstract class TodoBlocEvent {}
 
-class HomeBlocButtonTapEvent extends HomeBlocEvent {}
+class TodoBlocDeleteEvent extends TodoBlocEvent {
+  TodoBlocDeleteEvent(this.index);
+  int index;
+}
+
+class TodoBlocCompleteTodoEvent extends TodoBlocEvent {}
+
+class TodoBlocAddTodoEvent extends TodoBlocEvent {}
+
+class TodoBlocLoadTodoEvent extends TodoBlocEvent {}

@@ -1,5 +1,13 @@
-abstract class HomeStates {}
+abstract class TodoBlocStates {}
 
-class HomeLoadingState extends HomeStates {}
+class TodoBlocInitialState extends TodoBlocStates {}
 
-class HomeLoadedState extends HomeStates {}
+class TodoBlocLoadingState extends TodoBlocStates {}
+
+class TodoBlocLoadedState extends TodoBlocStates {}
+
+class TodoBlocTodoDeletedState extends TodoBlocStates {}
+
+class TodoBlocDeletedState extends TodoBlocStates {}
+
+class TodoBlocDeletingErrorState extends TodoBlocStates {}

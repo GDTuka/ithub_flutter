@@ -19,7 +19,7 @@ class HomeScreenWidget extends ElementaryWidget<IHomeWidgetModel> {
             EntityStateNotifierBuilder<String>(
               listenableEntityState: wm.mainScreeenListenable,
               errorBuilder: (context, e, data) {
-                return Container();
+                return const Text('Error');
               },
               loadingBuilder: (context, data) {
                 return const CircularProgressIndicator();
@@ -31,7 +31,9 @@ class HomeScreenWidget extends ElementaryWidget<IHomeWidgetModel> {
               },
             ),
             ElevatedButton(
-              onPressed: wm.buttonTap,
+              onPressed: () {
+                wm.deleteTodo(5);
+              },
               child: const Text('Tap'),
             )
           ],

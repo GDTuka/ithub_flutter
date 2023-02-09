@@ -2,31 +2,31 @@ import 'dart:async';
 
 import 'package:elementary/elementary.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_elementary_example/data/source/todo_local_ds.dart';
 import 'package:flutter_elementary_example/domain/home_bloc/home_bloc.dart';
 import 'package:flutter_elementary_example/domain/home_bloc/home_bloc_state.dart';
+import 'package:flutter_elementary_example/domain/todo_repository/todo_repository.dart';
 import 'package:flutter_elementary_example/home/home_model.dart';
 import 'package:flutter_elementary_example/home/home_view.dart';
 
 abstract class IHomeWidgetModel extends IWidgetModel {
   ListenableState<EntityState<String>> get mainScreeenListenable;
-  ListenableState<EntityState<TodoModel>> get totoModelListenable;
 
   TextEditingController get controller;
 
-  void buttonTap();
+  void deleteTodo(int index);
 }
 
 HomeWidgetModel homeWidgetModelFactory(BuildContext context) {
   return HomeWidgetModel(
     HomeModel(
-      HomeBloc(),
+      TodoBloc(
+        TodoRepository(
+          TodoLocalDS(),
+        ),
+      ),
     ),
   );
-}
-
-class TodoModel {
-  TodoModel(this.id);
-  int id;
 }
 
 class HomeWidgetModel extends WidgetModel<HomeScreenWidget, HomeModel> implements IHomeWidgetModel {
@@ -34,7 +34,7 @@ class HomeWidgetModel extends WidgetModel<HomeScreenWidget, HomeModel> implement
 
   final _mainScreenEntity = EntityStateNotifier<String>();
 
-  late final StreamSubscription<HomeStates> _homeBlocStreamSubcription;
+  late final StreamSubscription<TodoBlocStates> _homeBlocStreamSubcription;
 
   @override
   void initWidgetModel() {
@@ -45,12 +45,18 @@ class HomeWidgetModel extends WidgetModel<HomeScreenWidget, HomeModel> implement
     super.initWidgetModel();
   }
 
-  void _updateStates(HomeStates state) {
-    if (state is HomeLoadingState) {
-      _mainScreenEntity.loading();
+  void _updateStates(TodoBlocStates state) {
+    if (state is TodoBlocDeletedState) {
+      //* Удаляем объект из списка который на экране
+      print('4312');
     }
-    if (state is HomeLoadedState) {
-      _mainScreenEntity.content('Loaded');
+    if (state is TodoBlocDeletingErrorState) {
+      //* Показываем пользователю, что есть ошибка при удалении объекта, способом который понравится
+      print('1234');
+      _mainScreenEntity.error();
+    }
+    if (state is TodoBlocLoadingState) {
+      print('Loading');
     }
   }
 
@@ -64,19 +70,9 @@ class HomeWidgetModel extends WidgetModel<HomeScreenWidget, HomeModel> implement
   }
 
   @override
-  void buttonTap() {
-    model.buttonTap();
-
-    if (_todoModelEntity.value == null) return;
-    if (_todoModelEntity.value!.data == null) return;
-
-    model.saveTodoModel(_todoModelEntity.value!.data!);
+  void deleteTodo(int index) {
+    model.deleteTodo(index);
   }
-
-  final _todoModelEntity = EntityStateNotifier<TodoModel>();
-
-  @override
-  ListenableState<EntityState<TodoModel>> get totoModelListenable => _todoModelEntity;
 
   final _contoller = TextEditingController();
 
